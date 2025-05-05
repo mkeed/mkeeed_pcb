@@ -32,7 +32,7 @@ const SymbolIter = struct {
                     const start = self.idx;
                     while (self.peekCh()) |c| {
                         switch (c) {
-                            'a'...'z', 'A'...'Z', '_' => {
+                            'a'...'z', 'A'...'Z', '_', '0'...'9' => {
                                 _ = self.nextCh();
                             },
                             ' ', '\t', '\n' => {
@@ -63,6 +63,16 @@ const SymbolIter = struct {
                             },
                             '"' => break,
                             else => {},
+                        }
+                    }
+                    return .{ .value = self.data[start .. self.idx - 1] };
+                },
+                'a'...'z', 'A'...'Z', '_', '0'...'9', '.', '-' => {
+                    const start = self.idx;
+                    while (self.nextCh()) |c| {
+                        switch (c) {
+                            'a'...'z', 'A'...'Z', '_', '0'...'9', '.', '-' => {},
+                            else => break,
                         }
                     }
                     return .{ .value = self.data[start .. self.idx - 1] };

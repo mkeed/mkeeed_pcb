@@ -18,7 +18,7 @@ pub fn main() !void {
     try bw.flush(); // Don't forget to flush!
 }
 test {
-    _ = @import("NetFile.zig");
+    _ = @import("Kicad.zig");
 }
 
 const std = @import("std");

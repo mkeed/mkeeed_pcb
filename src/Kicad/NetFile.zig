@@ -1,6 +1,7 @@
 const std = @import("std");
-const Sexp = @import("Sexp.zig");
-
+const Sexp = @import("../Sexp.zig");
+pub const Reference = []const u8;
+pub const PinReference = []const u8;
 pub const Export = struct {
     version: enum { E },
     design: Design,
@@ -52,7 +53,7 @@ pub const Design = struct {
 };
 
 test {
-    const file = @embedFile("thumbboard.net");
+    const file = @embedFile("../thumbboard.net");
 
     const net_file = try Sexp.decodeToMap(file, std.testing.allocator);
     defer net_file.deinit();
