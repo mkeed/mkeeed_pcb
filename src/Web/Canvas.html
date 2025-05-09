@@ -18,43 +18,10 @@
 </head>
 
 <body>
-  <canvas id="pcb_layout" width="400" height="400">
+  <canvas id="pcb_layout" width="1200" height="1200">
     
   </canvas>
-  
-  <script>
-    const points = [
-	{start:{x:10, y:10}, end:{x:100, y:100}},
-	{start:{x:100, y:100}, end:{x:200, y:100}},
-    ];
-    const points2 = [
-	points[0].start,
-	points[1].start,
-	points[1].end,
-    ];
-    var c = document.getElementById("pcb_layout");
-    var ctx = c.getContext("2d");
-    ctx.beginPath();
-    ctx.lineWidth = 50;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = "blue";
-    ctx.moveTo(points2[0].x, points2[0].y);
-    points2.forEach((p) => {
-	
-	ctx.lineTo(p.x, p.y);
-	
-    });
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.strokeStyle = "red";
-    points.forEach((p) => {
-	ctx.moveTo(p.start.x, p.start.y);
-	ctx.lineTo(p.end.x, p.end.y);
-    });
-    
-    ctx.stroke();
-
-  </script>
+  <script src="PCB.js"></script>
 
 </body>
 </html>
