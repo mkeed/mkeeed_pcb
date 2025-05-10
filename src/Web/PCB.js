@@ -28,6 +28,32 @@ function map_point(input,
 	   };
 }
 
+function revmap_point(input, in_port, out_port)
+{
+    return map_point(input, out_port, in_port);
+}
+
+function snap_to_grid(point, grid)
+{
+    return {
+	x: Math.round(point.x/grid.x)*grid.x,
+	y:Math.round(point.y/grid.y)*grid.y
+    };
+}
+
+function revmap_to_grid(
+    input,
+    view_port,
+    out_port,
+    grid)
+{
+    const p = revmap_point(input, view_port, out_port);
+    const g = snap_to_grid(p, grid);
+    const ret = map_point(g, view_port, out_port);
+    console.log("revmap",p, "input",input, ret);
+    return ret;
+}
+
 function mouse_move(e)
 {
     //console.log("mouse move",e);
@@ -47,6 +73,10 @@ function mouse_move(e)
 	    view_port:{
 		pos:{x:0,y:0},
 		rect:{x:400,y:400},
+	    },
+	    grid: {
+		x: 10,
+		y: 10,
 	    },
 	},
 	{
@@ -76,6 +106,7 @@ function draw_pcb(
     draw_rules,
     info,
     layout) {
+    
     var c = document.getElementById("pcb_layout");
     c.onmousemove = mouse_move;
     var ctx = c.getContext("2d");
@@ -84,7 +115,7 @@ function draw_pcb(
 	rect:{x:c.clientWidth, y:c.clientHeight}
     };
     ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
-
+    
 
     layout.layers.forEach((layer) => {
 	ctx.beginPath();
@@ -103,14 +134,35 @@ function draw_pcb(
 	ctx.stroke();
     });
     ctx.beginPath();
+    ctx.strokeStyle = "green";
+    ctx.lineWidth = 1;
+    for (let y = info.view_port.pos.y;
+	 y < info.view_port.pos.y + info.view_port.rect.y;
+	 y += info.grid.y) {
+	for (let x = info.view_port.pos.x;
+	     x < info.view_port.pos.x + info.view_port.rect.x;
+	     x += info.grid.x) {
+	    const point   = map_point({x:x, y:y}, info.view_port, out_port);
+	    ctx.moveTo(point.x, point.y);
+	    ctx.arc(point.x, point.y, 1, 0, 2 * Math.PI);
+	}
+    }
+    ctx.stroke();
+    
+    ctx.beginPath();
     ctx.strokeStyle = "gray";
     ctx.lineWidth = 1;
     //console.log(c);
-    ctx.moveTo(0,info.crosshair.y);
-    ctx.lineTo(c.clientHeight,info.crosshair.y);
+    const map_crosshair = revmap_to_grid(
+	info.crosshair,
+	info.view_port,
+	out_port,
+	info.grid);
+    ctx.moveTo(0,map_crosshair.y);
+    ctx.lineTo(c.clientHeight,map_crosshair.y);
 
-    ctx.moveTo(info.crosshair.x,0);
-    ctx.lineTo(info.crosshair.x,c.clientHeight);
+    ctx.moveTo(map_crosshair.x,0);
+    ctx.lineTo(map_crosshair.x,c.clientHeight);
     ctx.stroke();
 }
 
