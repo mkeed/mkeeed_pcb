@@ -41,8 +41,8 @@ function mouse_move(e)
 	},
 	{
 	    "crosshair":{
-		x:e.layerX - rect.left,
-		y:e.layerY - rect.top,
+		x:e.clientX - rect.left,
+		y:e.clientY - rect.top,
 	    },
 	    view_port:{
 		pos:{x:0,y:0},
