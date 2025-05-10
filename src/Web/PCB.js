@@ -31,6 +31,7 @@ function map_point(input,
 function mouse_move(e)
 {
     //console.log("mouse move",e);
+    var rect = e.target.getBoundingClientRect();
     draw_pcb(
 	{
 	    layers:[
@@ -40,8 +41,8 @@ function mouse_move(e)
 	},
 	{
 	    "crosshair":{
-		x:e.clientX,
-		y:e.clientY,
+		x:e.layerX - rect.left,
+		y:e.layerY - rect.top,
 	    },
 	    view_port:{
 		pos:{x:0,y:0},
@@ -83,16 +84,7 @@ function draw_pcb(
 	rect:{x:c.clientWidth, y:c.clientHeight}
     };
     ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
-    ctx.beginPath();
-    ctx.strokeStyle = "gray";
-    ctx.lineWidth = 5;
-    //console.log(c);
-    ctx.moveTo(0,info.crosshair.y);
-    ctx.lineTo(c.clientHeight,info.crosshair.y);
 
-    ctx.moveTo(info.crosshair.x,0);
-    ctx.lineTo(info.crosshair.x,c.clientHeight);
-    ctx.stroke();
 
     layout.layers.forEach((layer) => {
 	ctx.beginPath();
@@ -102,15 +94,24 @@ function draw_pcb(
 	    ctx.lineWidth = p.thickness;
 	    const start = map_point(p.start, info.view_port, out_port);
 	    const end   = map_point(p.end, info.view_port, out_port);
-	    console.log("start", start, p.start);
-	    console.log("end", end, p.end);
+	    //console.log("start", start, p.start);
+	    //console.log("end", end, p.end);
 	    ctx.moveTo(start.x, start.y);
 	    ctx.lineTo(end.x, end.y);
 	});
     
 	ctx.stroke();
     });
+    ctx.beginPath();
+    ctx.strokeStyle = "gray";
+    ctx.lineWidth = 1;
+    //console.log(c);
+    ctx.moveTo(0,info.crosshair.y);
+    ctx.lineTo(c.clientHeight,info.crosshair.y);
 
+    ctx.moveTo(info.crosshair.x,0);
+    ctx.lineTo(info.crosshair.x,c.clientHeight);
+    ctx.stroke();
 }
 
 
