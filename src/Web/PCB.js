@@ -61,8 +61,9 @@ function mouse_move(e)
     draw_pcb(
 	{
 	    layers:[
-		{"name":"F.Cu","idx":1, "colour":"red"},
-		{"name":"B.Cu","idx":2, "colour":"blue"},
+		{"name":"F.Cu","id":1, "colour":"red"},
+		{"name":"B.Cu","id":2, "colour":"blue"},
+		{"name":"Edge.Cuts", "id":3, "colour":"gray"},
 	    ],
 	},
 	{
@@ -95,6 +96,15 @@ function mouse_move(e)
 			{"start":{x:300,y:300},"end": {x:350,y:300},"thickness":50},
 			{"start":{x:350,y:300},"end": {x:350,y:350},"thickness":50},
 			{"start":{x:200,y:300},"end": {x:300,y:300},"thickness":50}
+		    ]
+		},
+		{
+		    "name":"Edge.Cuts",
+		    "traces":[
+			{"start":{x:50,y:50}, "end":{x:375,y:50},"thickness":1},
+			{"start":{x:375,y:50}, "end":{x:375,y:375},"thickness":1},
+			{"start":{x:375,y:375}, "end":{x:50,y:375},"thickness":1},
+			{"start":{x:50,y:375}, "end":{x:50,y:50},"thickness":1},
 		    ]
 		}
 	    ]
